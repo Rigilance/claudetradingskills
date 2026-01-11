@@ -33,13 +33,22 @@ trading/technical-analysis/
 
 ### Installation
 
+**Option 1: Direct Clone**
 ```bash
-# Clone to your skills directory
-git clone https://github.com/YOUR_USERNAME/claude-skills-library ~/.claude-skills
-
-# Or for Claude Code
-git clone https://github.com/YOUR_USERNAME/claude-skills-library ~/claude-skills
+# In your project directory
+git clone https://github.com/Rigilance/claudetradingskills.git .claude-skills
 ```
+
+**Option 2: Git Submodule (Recommended)**
+```bash
+# Better for version control - links the skills library as a submodule
+git submodule add https://github.com/Rigilance/claudetradingskills.git .claude-skills
+```
+
+The submodule approach is recommended because it:
+- Tracks specific versions of the skills library
+- Keeps the skills library updated across projects
+- Maintains clean separation between your project and the skills
 
 ### Usage with Claude
 
