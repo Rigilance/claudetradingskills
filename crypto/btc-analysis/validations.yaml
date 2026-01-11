@@ -1,0 +1,95 @@
+validations:
+  - id: no-btc-check-for-alts
+    name: Alt Trade Without BTC Check
+    severity: critical
+    type: conceptual
+    check: "All altcoin trades must include BTC trend analysis"
+    indicators:
+      - "Alt analysis without BTC mention"
+      - "Ignoring BTC direction"
+      - "Alt-only focus"
+    message: "Altcoin trade without BTC trend check - high correlation risk."
+    fix_action: |
+      Before any alt trade:
+      1. Check BTC trend (above/below key MAs)
+      2. Check BTC dominance direction
+      3. Only proceed if BTC supports alt direction
+
+  - id: no-dominance-context
+    name: Missing BTC Dominance Analysis
+    severity: medium
+    type: conceptual
+    check: "BTC analysis should include dominance context"
+    indicators:
+      - "No dominance mentioned"
+      - "BTC/USD only"
+    message: "BTC dominance not considered in analysis."
+    fix_action: |
+      Include BTC.D analysis:
+      - Rising BTC.D = BTC outperforming alts
+      - Falling BTC.D = Alt season potential
+      - Affects alt trade selection
+
+  - id: no-macro-correlation
+    name: Missing Macro Correlation Check
+    severity: medium
+    type: conceptual
+    check: "BTC analysis should reference macro correlations"
+    indicators:
+      - "No SPX mention"
+      - "No DXY consideration"
+      - "Crypto-only view"
+    message: "Macro correlations not considered."
+    fix_action: |
+      Check macro context:
+      - SPX direction (risk on/off)
+      - DXY level (above/below 105)
+      - Upcoming Fed events
+
+  - id: cycle-overconfidence
+    name: Overreliance on Halving Cycle
+    severity: medium
+    type: conceptual
+    check: "Cycle analysis should include uncertainty"
+    indicators:
+      - "Guaranteed" language
+      - "Will definitely" statements
+      - "Cycle says" as certainty
+    message: "Cycle treated as certainty rather than probability."
+    fix_action: |
+      Reframe cycle analysis:
+      - Cycles inform, don't guarantee
+      - Still require price confirmation
+      - Manage risk as if cycle could fail
+
+  - id: leverage-warning
+    name: High Leverage on BTC
+    severity: critical
+    type: conceptual
+    check: "BTC leverage should not exceed 3x"
+    indicators:
+      - "5x leverage"
+      - "10x leverage"
+      - "High leverage"
+    message: "Leverage exceeds safe maximum for BTC."
+    fix_action: |
+      Reduce leverage:
+      - Max 3x on BTC
+      - Max 2x during volatility
+      - 1x during major events
+
+  - id: key-levels-missing
+    name: No Key Levels Defined
+    severity: high
+    type: conceptual
+    check: "BTC analysis must include key price levels"
+    indicators:
+      - "No support mentioned"
+      - "No resistance mentioned"
+      - "Vague price references"
+    message: "Key BTC levels not defined in analysis."
+    fix_action: |
+      Define key levels:
+      - Immediate support/resistance
+      - Major support zones
+      - Invalidation level

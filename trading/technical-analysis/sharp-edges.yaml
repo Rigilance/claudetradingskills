@@ -1,0 +1,192 @@
+sharp_edges:
+  - id: trading-against-trend
+    summary: Fighting the dominant trend
+    severity: high
+    situation: Taking counter-trend trades in strong momentum
+    why: |
+      Counter-trend trades have significantly lower probability of success.
+      Strong trends can persist far longer than logic suggests.
+      "Markets can remain irrational longer than you can remain solvent."
+    solution: |
+      ## Before Counter-Trend Trades, Verify:
+      
+      | Checklist | Yes/No |
+      |-----------|--------|
+      | Clear divergence on 2+ timeframes? | _____ |
+      | Price at major structural level? | _____ |
+      | Volume showing exhaustion? | _____ |
+      | Multiple timeframe confluence? | _____ |
+      | Reduced position size? | _____ |
+      
+      If less than 4 "Yes" answers, WAIT for trend weakness confirmation.
+    symptoms:
+      - "I think this is oversold"
+      - "It can't go higher/lower"
+      - Multiple stop-outs in same direction
+      - "This is a great level to fade"
+    detection_pattern: "oversold|overbought|can't go|due for|has to reverse"
+
+  - id: revenge-trading
+    summary: Trading to recover losses emotionally
+    severity: critical
+    situation: After a losing trade, immediately entering another without proper analysis
+    why: |
+      Emotional decisions override rational analysis.
+      Increased position size to "make it back" amplifies losses.
+      Revenge trading is the #1 account killer.
+    solution: |
+      ## After a Loss:
+      
+      1. STOP - Walk away for at least 15 minutes
+      2. JOURNAL - Write what went wrong
+      3. CHECK - Does next trade meet ALL criteria?
+      4. SIZE - Use normal or reduced size, never increased
+      
+      If you feel "I need to make this back":
+      - You are NOT in trading mindset
+      - Close the charts
+      - Return tomorrow
+    symptoms:
+      - "I need to make this back"
+      - Immediate entry after stop hit
+      - Increasing position size after loss
+      - Skipping setup checklist
+    detection_pattern: "make back|recover|double down|increase size after"
+
+  - id: fomo-entries
+    summary: Entering after significant price move
+    severity: high
+    situation: Buying because price is going up rapidly without proper setup
+    why: |
+      Late entries have poor risk/reward.
+      You're likely buying from earlier traders taking profit.
+      FOMO leads to buying tops and selling bottoms.
+    solution: |
+      ## FOMO Checklist:
+      
+      - Did this move happen without you? Accept it.
+      - Is there a clear pullback entry available? Wait for it.
+      - What's the risk/reward from HERE? Calculate honestly.
+      - Would you take this setup if you just opened the chart?
+      
+      "The best trades feel boring at entry."
+    symptoms:
+      - "It's running without me"
+      - "I'll just get in now"
+      - No clear stop loss level
+      - Entry at daily high/low
+    detection_pattern: "running|missing out|FOMO|just get in|don't miss"
+
+  - id: analysis-paralysis
+    summary: Over-analyzing and missing opportunities
+    severity: medium
+    situation: Spending hours on analysis without taking action
+    why: |
+      Perfect setups don't exist.
+      More indicators often means more confusion.
+      The market won't wait for your analysis to be complete.
+    solution: |
+      ## Combat Analysis Paralysis:
+      
+      1. SET TIME LIMIT: Max 15 minutes per asset
+      2. USE CHECKLIST: 5 criteria max, must meet 4
+      3. DECIDE: In or out, no "maybes"
+      4. EXECUTE: Once decided, act within 1 hour
+      
+      If you can't decide in 15 minutes, the setup isn't clear enough.
+    symptoms:
+      - "Let me check one more indicator"
+      - Multiple tabs open for same asset
+      - Analysis time > 30 minutes per setup
+      - "I need more confirmation"
+    detection_pattern: "one more|not sure|need more|let me check"
+
+  - id: ignoring-invalidation
+    summary: Holding losers past invalidation point
+    severity: critical
+    situation: Moving stop loss or ignoring when price invalidates thesis
+    why: |
+      Small losses become large losses.
+      Invalidation exists for a reason - your thesis was wrong.
+      Hope is not a trading strategy.
+    solution: |
+      ## Invalidation Rules:
+      
+      1. Define invalidation BEFORE entry (written)
+      2. Never move stop further from entry
+      3. If invalidated, exit. No exceptions.
+      4. Journal why thesis was wrong
+      
+      "The first loss is the best loss."
+    symptoms:
+      - "I'll give it more room"
+      - Moving stop loss down/up
+      - "It will come back"
+      - Averaging down on losers
+    detection_pattern: "give it room|will come back|average down|move stop"
+
+  - id: overconfidence-after-wins
+    summary: Increasing risk after winning streak
+    severity: high
+    situation: Feeling invincible after several winning trades
+    why: |
+      Winning streaks are often followed by mean reversion.
+      Increased confidence leads to larger position sizes.
+      One oversize loss can wipe out multiple small wins.
+    solution: |
+      ## After Winning Streak:
+      
+      1. MAINTAIN standard position sizes
+      2. REVIEW: Were wins skill or luck?
+      3. EXPECT mean reversion (mentally prepare)
+      4. TIGHTEN criteria - be more selective, not less
+    symptoms:
+      - "I can't lose"
+      - Increasing position sizes
+      - Taking "B-grade" setups
+      - Reducing analysis time
+    detection_pattern: "can't lose|on fire|increase size|easy money"
+
+  - id: weekend-analysis-bias
+    summary: Forming strong opinions during weekend when markets are closed
+    severity: medium
+    situation: Building conviction on direction when you can't test hypothesis
+    why: |
+      Weekend gaps can invalidate weekend analysis.
+      News over weekend changes everything.
+      Crypto trades 24/7 but liquidity is lower.
+    solution: |
+      ## Weekend Analysis Rules:
+      
+      1. USE weekends for strategy review, not conviction building
+      2. WAIT for Monday/Sunday night price action
+      3. MARK key levels, don't predict direction
+      4. PREPARE for multiple scenarios, not one
+    symptoms:
+      - Strong directional conviction formed Saturday
+      - Limit orders set before Sunday open
+      - "Monday will definitely..."
+    detection_pattern: "definitely|100%|will gap|Monday direction"
+
+  - id: news-trading-failure
+    summary: Trading news events without edge
+    severity: high
+    situation: Trying to predict market reaction to news
+    why: |
+      News reaction is often opposite of logical expectation.
+      Algos and institutions have faster execution.
+      Slippage destroys retail edge on news.
+    solution: |
+      ## News Trading Protocol:
+      
+      1. REDUCE size before known events (FOMC, CPI)
+      2. WAIT 15-30 minutes after news for dust to settle
+      3. TRADE the reaction, not the news
+      4. ACCEPT that sitting out is valid
+      
+      "Don't trade the news, trade the chart after the news."
+    symptoms:
+      - Guessing CPI/FOMC direction
+      - Position before news without hedge
+      - "Good news = price up"
+    detection_pattern: "CPI will|FOMC will|news means|should gap"

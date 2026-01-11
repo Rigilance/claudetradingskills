@@ -1,0 +1,213 @@
+sharp_edges:
+  - id: pivot-as-certainty
+    summary: Treating pivot dates as guaranteed reversals
+    severity: critical
+    situation: Entering large positions because "it's a pivot day"
+    why: |
+      Pivot dates indicate increased probability, not certainty.
+      Roughly 60-70% of pivots see "significant" moves.
+      But 30-40% will be false signals or noise.
+      Treating pivots as certainties leads to overconfidence and losses.
+    solution: |
+      ## Pivot Reality Check:
+      
+      | What Pivots Tell You | What Pivots DON'T Tell You |
+      |---------------------|---------------------------|
+      | When to pay attention | Direction of move |
+      | Probability shift | Magnitude of move |
+      | Time of potential change | Whether it will happen |
+      
+      PROTOCOL:
+      1. Pivot = attention point
+      2. Wait for price action confirmation
+      3. Enter only with technical trigger
+      4. Accept some pivots will be noise
+    symptoms:
+      - "The pivot says we reverse today"
+      - Large position on pivot day without confirmation
+      - "IKAGI is never wrong"
+    detection_pattern: "guaranteed|certain|will reverse|must turn"
+
+  - id: early-entry-before-pivot
+    summary: Entering before pivot date to "get better price"
+    severity: high
+    situation: Taking position 2-3 days before pivot anticipating reversal
+    why: |
+      Trend can continue through pivot without reversing.
+      Early entry means stop might get hit before pivot arrives.
+      Price might not reach your anticipated level.
+    solution: |
+      ## Timing Protocol:
+      
+      WRONG:
+      - Enter 3 days before pivot
+      - "I'll get in early for better price"
+      
+      RIGHT:
+      - Wait until pivot window (±1 day)
+      - Require price confirmation
+      - Accept potentially worse price for higher probability
+      
+      "It's better to miss the bottom and confirm the turn
+       than catch the bottom and be wrong."
+    symptoms:
+      - Position entered days before pivot
+      - "I want to be ahead of the turn"
+      - No price confirmation required
+    detection_pattern: "get in early|better price|ahead of|anticipate"
+
+  - id: ignoring-failed-pivot
+    summary: Refusing to accept when pivot doesn't produce expected result
+    severity: high
+    situation: Pivot day passes, no reversal, but still holding onto thesis
+    why: |
+      Not every pivot produces a reversal.
+      Holding failed thesis leads to larger losses.
+      Markets don't care about your analysis.
+    solution: |
+      ## Failed Pivot Protocol:
+      
+      After pivot day + 1:
+      1. Did price confirm your thesis? (Y/N)
+      2. If NO: Thesis is invalidated
+      3. If invalidated: Exit or stop out
+      4. Do NOT extend "just give it one more day"
+      
+      Pivot window is 2 days. After that, move on.
+    symptoms:
+      - "The pivot just needs more time"
+      - Extending thesis past pivot window
+      - Moving stops to avoid being wrong
+    detection_pattern: "needs more time|just wait|will still happen"
+
+  - id: over-reliance-on-historical-accuracy
+    summary: Expecting future pivots to match historical accuracy
+    severity: medium
+    situation: "Last 5 pivots worked, so this one will too"
+    why: |
+      Past performance doesn't guarantee future results.
+      Market conditions change.
+      Sample size of pivots is often small.
+    solution: |
+      ## Historical Data Usage:
+      
+      USE historical accuracy for:
+      - Informing position size (not conviction)
+      - Understanding typical magnitude
+      - Setting realistic expectations
+      
+      DON'T USE for:
+      - "Guaranteeing" this pivot will work
+      - Increasing position size
+      - Skipping price confirmation
+    symptoms:
+      - "Last 5 worked, this one will too"
+      - Oversized position due to track record
+      - Skipping confirmation "because IKAGI"
+    detection_pattern: "track record|always works|never fails"
+
+  - id: missing-price-level-context
+    summary: Trading pivots without reference to key price levels
+    severity: high
+    situation: Only using time, ignoring where price is
+    why: |
+      Best pivot trades have confluence:
+      TIME (pivot) + PRICE (key level) + VOLUME
+      Time alone is insufficient.
+      Price level provides confirmation and stop placement.
+    solution: |
+      ## Pivot + Price Framework:
+      
+      Before pivot trade:
+      - [ ] Key support/resistance identified
+      - [ ] Price is AT or NEAR key level
+      - [ ] Stop loss has structural basis
+      - [ ] Volume pattern noted
+      
+      If price is in "no man's land" at pivot:
+      - Lower probability setup
+      - Reduce size or skip
+    symptoms:
+      - "It's pivot day, I'll trade"
+      - No price levels defined
+      - Stop not based on structure
+    detection_pattern: "just because pivot|time-only|don't care about price"
+
+  - id: pivot-clustering-confusion
+    summary: Not properly handling multiple nearby pivots
+    severity: medium
+    situation: Two pivots 2 days apart, treating each independently
+    why: |
+      Clustered pivots should be treated as a zone, not separate events.
+      Extended volatility period expected.
+      May see whipsaw between pivots.
+    solution: |
+      ## Cluster Protocol:
+      
+      When 2+ pivots within 3 days:
+      1. Treat as SINGLE event window
+      2. Reduce size more aggressively
+      3. Widen stops for whipsaw
+      4. Wait for cluster to complete
+      5. Confirm direction AFTER last pivot
+      
+      Don't trade the first pivot expecting the second to confirm it.
+    symptoms:
+      - "First pivot long, second pivot I'll add"
+      - Trading each pivot as separate signal
+      - Not waiting for cluster completion
+    detection_pattern: "first pivot|each pivot|add on second"
+
+  - id: different-asset-pivot-confusion
+    summary: Applying one asset's pivot to another
+    severity: medium
+    situation: BTC has pivot, trading ETH expecting same behavior
+    why: |
+      Pivots are asset-specific calculations.
+      BTC pivot doesn't mean ETH will behave same way.
+      Correlation exists but isn't 1:1.
+    solution: |
+      ## Multi-Asset Pivot Rules:
+      
+      BTC pivot exists:
+      - Trade BTC directly if want pivot exposure
+      - ETH/alts may follow but not guaranteed
+      - Don't assume alt pivot timing matches BTC
+      
+      If trading alt around BTC pivot:
+      - Acknowledge higher uncertainty
+      - Reduce size further
+      - Focus on BTC confirmation first
+    symptoms:
+      - "BTC pivot means ETH will reverse"
+      - Trading alt using BTC pivot timing
+      - Ignoring asset-specific pivots
+    detection_pattern: "BTC pivot so ETH|same for all|crypto pivot"
+
+  - id: news-override-denial
+    summary: Expecting pivot to work despite major news event
+    severity: high
+    situation: CPI release on pivot day, expecting pivot to dominate
+    why: |
+      Major news events can override pivot signals.
+      News creates immediate price action, pivots are probabilistic.
+      Better to wait for news dust to settle.
+    solution: |
+      ## News + Pivot Conflict:
+      
+      If major news on or near pivot day:
+      1. News impact comes first (hours)
+      2. Pivot impact comes second (days)
+      3. Wait for news reaction to settle
+      4. Then assess if pivot signal is valid
+      
+      High-impact events that override:
+      - FOMC decisions
+      - CPI/PPI releases
+      - Major geopolitical events
+      - Black swan events
+    symptoms:
+      - "Pivot will beat CPI"
+      - Ignoring scheduled news
+      - Not adjusting for event risk
+    detection_pattern: "pivot more important|ignore news|doesn't matter"

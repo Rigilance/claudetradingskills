@@ -1,0 +1,215 @@
+sharp_edges:
+  - id: risk-of-ruin
+    summary: Taking position sizes that can blow up account
+    severity: critical
+    situation: Position size so large that a few consecutive losses would devastate account
+    why: |
+      Risk of ruin is the mathematical probability of losing everything.
+      Even with 60% win rate, 10% risk per trade has >50% chance of ruin over time.
+      "You can only go broke once."
+    solution: |
+      ## Risk of Ruin Prevention:
+      
+      | Risk Per Trade | Risk of Ruin (55% WR) |
+      |----------------|----------------------|
+      | 1%             | ~0%                  |
+      | 2%             | ~1%                  |
+      | 5%             | ~10%                 |
+      | 10%            | ~50%                 |
+      | 20%            | ~85%                 |
+      
+      RULE: Keep risk per trade at 1-2% maximum.
+      Even with edge, variance can destroy you with large sizes.
+    symptoms:
+      - "I'll risk more on this great setup"
+      - Position size > 5% of account
+      - "I can't afford to lose this one"
+    detection_pattern: "risk more|big position|can't afford to lose|sure thing"
+
+  - id: correlation-blindness
+    summary: Multiple positions in correlated assets appearing diversified
+    severity: high
+    situation: Holding BTC, ETH, SOL, and AVAX thinking it's "diversified"
+    why: |
+      Crypto assets are 70-90% correlated.
+      When BTC dumps, everything dumps.
+      "Diversification" within crypto is an illusion.
+    solution: |
+      ## Correlation Risk Check:
+      
+      HIGHLY CORRELATED (treat as one position):
+      - All crypto (BTC, ETH, alts)
+      - Tech stocks (AAPL, MSFT, GOOGL)
+      - All risk assets in risk-off events
+      
+      RULES:
+      - Max 3% total risk in correlated bucket
+      - If 1% BTC + 1% ETH = 2% crypto risk
+      - Check correlation before adding position
+    symptoms:
+      - "I'm diversified in crypto"
+      - 5+ altcoin positions simultaneously
+      - "If BTC dumps, my alts might hold"
+    detection_pattern: "diversified|spread across|different coins|hedge"
+
+  - id: leverage-trap
+    summary: Using leverage without understanding liquidation math
+    severity: critical
+    situation: 10x leverage on volatile assets
+    why: |
+      10x leverage means 10% move = 100% gain or loss.
+      Liquidation often occurs BEFORE your stop loss.
+      Funding rates and slippage eat into profits.
+    solution: |
+      ## Leverage Rules:
+      
+      | Asset Type | Max Leverage |
+      |------------|--------------|
+      | BTC        | 3x           |
+      | ETH        | 2x           |
+      | Altcoins   | 1x (no leverage) |
+      | Stocks     | 2x           |
+      
+      LIQUIDATION BUFFER:
+      Stop loss should be at least 50% of distance to liquidation
+      
+      EXAMPLE:
+      10x long BTC at $90,000
+      Liquidation: ~$81,000 (10% drop)
+      Your stop: Should be above $85,500
+    symptoms:
+      - "I can handle high leverage"
+      - "Just for this trade"
+      - Stop loss near liquidation price
+    detection_pattern: "10x|20x|high leverage|liquidation|margin call"
+
+  - id: revenge-sizing
+    summary: Increasing position size after losses to recover faster
+    severity: critical
+    situation: Lost 3 trades, now doubling size on 4th
+    why: |
+      Losses have affected your judgment.
+      Larger size = larger potential loss.
+      Recovery is already hard; don't make it harder.
+    solution: |
+      ## Post-Loss Protocol:
+      
+      After 3 consecutive losses:
+      1. STOP trading for the day
+      2. REDUCE next position by 50%
+      3. REQUIRE extra confirmation on setups
+      4. RETURN to normal size after 2 wins
+      
+      "If you're digging a hole, stop digging."
+    symptoms:
+      - "I need to make this back"
+      - Increasing size after losses
+      - Taking more trades than usual
+    detection_pattern: "make back|recover|double size|bigger position"
+
+  - id: unrealistic-expectations
+    summary: Expecting consistent high returns without drawdowns
+    severity: medium
+    situation: Expecting 50%+ annual returns with minimal drawdown
+    why: |
+      Professional funds average 15-25% annually.
+      Even the best traders have 20-30% drawdowns.
+      High returns = high volatility = high drawdowns.
+    solution: |
+      ## Realistic Expectations:
+      
+      | Return Target | Typical Max DD | Realistic? |
+      |---------------|----------------|------------|
+      | 10%/year      | 5-10%          | Very       |
+      | 20%/year      | 10-20%         | Yes        |
+      | 50%/year      | 25-40%         | Possible   |
+      | 100%/year     | 40-60%         | Rare/Risky |
+      
+      RULE: Max drawdown often = annual return target
+    symptoms:
+      - "I should be making 10% per month"
+      - Frustration with "only" 30% annual
+      - Comparing to outlier results on Twitter
+    detection_pattern: "should be making|easy|guaranteed|every month"
+
+  - id: stop-loss-placement-error
+    summary: Placing stops at obvious levels that get hunted
+    severity: high
+    situation: Stop exactly at swing low where everyone else's stop is
+    why: |
+      Market makers hunt obvious stop levels.
+      Round numbers attract stop clusters.
+      Getting stopped out just before reversal is common.
+    solution: |
+      ## Smart Stop Placement:
+      
+      AVOID:
+      - Exactly at swing low/high
+      - Round numbers ($90,000, $100,000)
+      - Obvious pattern invalidation
+      
+      BETTER:
+      - 0.5-1% beyond the obvious level
+      - Use ATR for buffer sizing
+      - Give room for stop hunts
+      
+      EXAMPLE:
+      Obvious stop: $90,000 (swing low)
+      Better stop: $89,100 (1% below)
+    symptoms:
+      - Stopped out then price reverses
+      - Stop exactly at round number
+      - Multiple stops hit at same level
+    detection_pattern: "exact low|round number|everyone's stop"
+
+  - id: overtrading
+    summary: Taking too many positions, diluting edge
+    severity: medium
+    situation: 20+ trades per week, no clear strategy
+    why: |
+      More trades = more fees and slippage.
+      Quality setups are rare (2-4 per week for most).
+      Overtrading usually indicates poor discipline.
+    solution: |
+      ## Trade Frequency Guidelines:
+      
+      | Style       | Trades/Week | Notes |
+      |-------------|-------------|-------|
+      | Position    | 1-2         | Hold days-weeks |
+      | Swing       | 3-5         | Hold hours-days |
+      | Day trade   | 10-20       | Close same day |
+      
+      QUALITY CHECK:
+      - Does each trade meet ALL criteria?
+      - Are you taking "B-grade" setups?
+      - Could you explain each trade in 2 sentences?
+    symptoms:
+      - More than 5 trades/day (swing trader)
+      - "I'll take this one too"
+      - Multiple small losses daily
+    detection_pattern: "just one more|might as well|take this too"
+
+  - id: position-sizing-inconsistency
+    summary: Random position sizes without methodology
+    severity: high
+    situation: 0.5% risk one trade, 5% the next, based on "feel"
+    why: |
+      Inconsistent sizing destroys statistical edge.
+      Big losses on random large positions hurt average.
+      Makes it impossible to evaluate strategy.
+    solution: |
+      ## Consistent Sizing Protocol:
+      
+      1. DEFINE standard risk (1% recommended)
+      2. CALCULATE every position using formula
+      3. DOCUMENT sizes in trade journal
+      4. REVIEW monthly for consistency
+      
+      EXCEPTIONS (only):
+      - Reduced size: Low conviction, high volatility
+      - Never increased size based on "feel"
+    symptoms:
+      - "I'll size up on this one"
+      - Different % risk each trade
+      - Gut-feel position sizing
+    detection_pattern: "size up|bigger on this|feels right|go large"

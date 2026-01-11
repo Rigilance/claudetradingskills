@@ -1,0 +1,32 @@
+sharp_edges:
+  - id: leverage-on-btc
+    summary: Using excessive leverage on already volatile asset
+    severity: critical
+    situation: 10x+ leverage on BTC
+    why: BTC can move 10-20% in a day. 10x leverage = liquidation.
+    solution: Max 3x leverage on BTC, preferably spot only.
+    detection_pattern: "10x|20x|high leverage|leveraged long"
+
+  - id: ignoring-btc-for-alts
+    summary: Trading alts without checking BTC
+    severity: high
+    situation: Long alts while BTC is breaking down
+    why: 90% of alts follow BTC. BTC down = alts down more.
+    solution: Always check BTC before alt trades.
+    detection_pattern: "alt only|don't care about BTC"
+
+  - id: cycle-certainty
+    summary: Assuming cycle will repeat exactly
+    severity: medium
+    situation: "Halving = guaranteed 10x"
+    why: Each cycle is different. Macro matters more now.
+    solution: Use cycles as framework, not guarantee.
+    detection_pattern: "guaranteed|always|every cycle|will 10x"
+
+  - id: fomo-at-ath
+    summary: Buying aggressively at all-time highs
+    severity: high
+    situation: Loading up because "it's going to $200K"
+    why: ATH often sees pullbacks. Risk/reward poor.
+    solution: Scale in, don't FOMO. Wait for pullback.
+    detection_pattern: "ATH|all time high|moon|can't stop"

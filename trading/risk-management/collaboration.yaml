@@ -1,0 +1,245 @@
+skill_id: risk-management
+collaboration_version: "1.0"
+
+receives_from:
+  - skill: technical-analysis
+    context: "Trade setup parameters"
+    receives:
+      - "Entry price level"
+      - "Stop loss level (structure-based)"
+      - "Target price levels"
+      - "Setup confidence score"
+    provides: "Position size and risk validation"
+
+  - skill: market-regime
+    context: "Market volatility context"
+    receives:
+      - "Current volatility regime"
+      - "Risk-on/risk-off status"
+      - "Trend strength"
+    provides: "Adjusted position sizing for conditions"
+
+  - skill: macro-analysis
+    context: "Event risk"
+    receives:
+      - "Upcoming high-impact events"
+      - "Fed meeting dates"
+      - "Economic data releases"
+    provides: "Event-adjusted risk parameters"
+
+  - skill: portfolio-optimization
+    context: "Portfolio context"
+    receives:
+      - "Current positions"
+      - "Sector exposure"
+      - "Correlation matrix"
+    provides: "Position sizing with portfolio context"
+
+provides_to:
+  - skill: trade-execution
+    context: "Execution parameters"
+    provides:
+      - "Position size (units)"
+      - "Maximum position value"
+      - "Scaling plan"
+    receives: "Execution confirmation"
+
+  - skill: technical-analysis
+    context: "Risk validation"
+    provides:
+      - "Risk/reward assessment"
+      - "Position size feasibility"
+      - "Correlation risk check"
+    receives: "Adjusted setup parameters"
+
+delegation_triggers:
+  - trigger: "entry level|chart setup|technical"
+    delegate_to: technical-analysis
+    pattern: sequential
+    context: "Need TA to define entry and stop levels"
+    data_to_pass:
+      - asset_symbol
+      - desired_direction
+
+  - trigger: "volatility|market conditions|regime"
+    delegate_to: market-regime
+    pattern: parallel
+    context: "Check volatility for position sizing adjustment"
+    data_to_pass:
+      - asset_symbol
+      - timeframe
+
+  - trigger: "execute|place order|enter"
+    delegate_to: trade-execution
+    pattern: sequential
+    context: "Position sized, ready to execute"
+    data_to_pass:
+      - position_size
+      - entry_price
+      - stop_loss
+      - order_type
+
+  - trigger: "portfolio|other positions|exposure"
+    delegate_to: portfolio-optimization
+    pattern: parallel
+    context: "Check portfolio context for new position"
+    data_to_pass:
+      - proposed_position
+      - correlation_group
+
+common_combinations:
+  - name: Standard Trade Sizing
+    skills:
+      - technical-analysis
+      - risk-management
+    workflow: |
+      1. Technical analysis provides:
+         - Entry: $91,500
+         - Stop: $89,200
+         - Target: $96,000
+      
+      2. Risk management calculates:
+         - Risk %: 1%
+         - Position size: 0.435 BTC
+         - R:R: 1:1.96 ✓
+
+  - name: Volatility-Adjusted Sizing
+    skills:
+      - market-regime
+      - risk-management
+      - technical-analysis
+    workflow: |
+      1. Market regime identifies:
+         - High volatility environment
+         - Risk-off sentiment
+      
+      2. Risk management adjusts:
+         - Reduce standard risk from 1% to 0.5%
+         - Widen stops using ATR
+         - Smaller position size
+      
+      3. Technical analysis validates:
+         - Entry still valid
+         - Targets achievable
+
+  - name: Portfolio-Aware Sizing
+    skills:
+      - portfolio-optimization
+      - risk-management
+      - technical-analysis
+    workflow: |
+      1. Portfolio check:
+         - Existing 2% crypto exposure
+         - New trade is ETH (correlated)
+      
+      2. Risk management adjusts:
+         - Max additional crypto: 1%
+         - Reduce proposed size
+         - Check total correlation
+      
+      3. Position approved with adjusted size
+
+  - name: Event Risk Sizing
+    skills:
+      - macro-analysis
+      - risk-management
+      - technical-analysis
+    workflow: |
+      1. Macro check:
+         - FOMC in 2 days
+         - CPI release tomorrow
+      
+      2. Risk adjustment:
+         - Reduce size by 50%
+         - Widen stops for event volatility
+         - Consider waiting for event
+      
+      3. Execute with event-adjusted parameters
+
+conflict_resolution:
+  - scenario: "TA wants 1% risk but portfolio already at 5% exposure"
+    resolution: |
+      - Portfolio limits take priority
+      - Reduce to 0.5% risk or skip trade
+      - Total portfolio risk max 6%
+    priority: portfolio-optimization
+
+  - scenario: "Standard stop too tight for current volatility"
+    resolution: |
+      - Widen stop to 2 ATR
+      - Reduce position size to maintain 1% risk
+      - Validate with structure
+    priority: market-regime
+
+  - scenario: "Good setup but major event upcoming"
+    resolution: |
+      - Reduce size by 50%
+      - Or wait until after event
+      - Event risk trumps setup quality
+    priority: macro-analysis
+
+data_contracts:
+  inputs:
+    trade_setup:
+      required: true
+      format: "object"
+      fields:
+        entry_price: "number"
+        stop_loss: "number"
+        target: "number"
+        
+    account_info:
+      required: true
+      format: "object"
+      fields:
+        balance: "number"
+        existing_risk: "number"
+        
+  outputs:
+    position_size:
+      format: "object"
+      fields:
+        units: "number"
+        value_usd: "number"
+        risk_percent: "number"
+        risk_usd: "number"
+        risk_reward: "number"
+        correlation_check: "passed | warning | failed"
+        approved: "boolean"
+        notes: "string[]"
+
+calculation_delegation:
+  when_calculate:
+    - "User provides entry and stop"
+    - "User asks for position size"
+    - "After TA setup is complete"
+  
+  what_to_validate:
+    - "Risk % within limits"
+    - "R:R meets minimum"
+    - "Correlation exposure"
+    - "Total portfolio risk"
+    - "Leverage if applicable"
+
+  output_format: |
+    **Position Size Calculation**
+    
+    Account: ${account_balance}
+    Risk: {risk_percent}% = ${risk_amount}
+    
+    Entry: ${entry_price}
+    Stop: ${stop_loss}
+    Distance: {distance_percent}%
+    
+    Position Size: {units} {asset}
+    Position Value: ${value}
+    
+    Targets:
+    - T1: ${target_1} (R:R {rr_1})
+    - T2: ${target_2} (R:R {rr_2})
+    
+    Checks:
+    ✓/✗ Risk within limits
+    ✓/✗ R:R acceptable
+    ✓/✗ Correlation OK
+    ✓/✗ Portfolio exposure OK

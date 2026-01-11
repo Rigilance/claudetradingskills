@@ -1,0 +1,27 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+
+# Temp files
+*.tmp
+*~
+
+# Node (if adding tooling later)
+node_modules/
+package-lock.json
+yarn.lock
+
+# Python (if adding tooling later)
+__pycache__/
+*.pyc
+.venv/
+venv/

@@ -1,0 +1,62 @@
+skill_id: pivot-trading
+collaboration_version: "1.0"
+
+receives_from:
+  - skill: technical-analysis
+    context: "Price level context for pivots"
+    receives:
+      - "Key support/resistance levels"
+      - "Current trend direction"
+      - "Pattern formations"
+    provides: "Time-based context for TA setups"
+
+  - skill: macro-analysis
+    context: "Event calendar"
+    receives:
+      - "Scheduled news events"
+      - "FOMC dates"
+      - "CPI/economic releases"
+    provides: "Pivot vs news conflict identification"
+
+provides_to:
+  - skill: technical-analysis
+    context: "Time-based alerts"
+    provides:
+      - "Upcoming pivot dates"
+      - "Pivot clusters"
+      - "Historical accuracy"
+    receives: "Price levels at pivots"
+
+  - skill: risk-management
+    context: "Position sizing adjustment"
+    provides:
+      - "Pivot window status"
+      - "Recommended size reduction"
+    receives: "Adjusted position parameters"
+
+delegation_triggers:
+  - trigger: "price level|support|resistance|chart"
+    delegate_to: technical-analysis
+    pattern: parallel
+    context: "Need price levels to combine with pivot timing"
+
+  - trigger: "position size|risk|how much"
+    delegate_to: risk-management
+    pattern: sequential
+    context: "Need pivot-adjusted position sizing"
+
+common_combinations:
+  - name: IKAGI Pivot Trade Setup
+    skills:
+      - pivot-trading
+      - technical-analysis
+      - risk-management
+    workflow: |
+      1. Identify pivot dates (pivot-trading)
+      2. Add price context (technical-analysis)
+      3. Calculate adjusted size (risk-management)
+
+ikagi_integration:
+  monthly_pivots_format: |
+    January 2025 BTC Pivots: Jan 1, 9, 23, 29
+    Key Levels: Support $70K-$72K, Resistance $96K-$103K

@@ -1,0 +1,134 @@
+validations:
+  - id: no-price-confirmation
+    name: Pivot Trade Without Price Confirmation
+    severity: critical
+    type: conceptual
+    check: "Every pivot trade must have price action confirmation"
+    indicators:
+      - "Trading only because it's pivot day"
+      - "No technical trigger defined"
+      - "Just trusting the pivot"
+    message: "Pivot trade entered without price confirmation."
+    fix_action: |
+      Define price confirmation before entry:
+      - Candle pattern at key level
+      - Break of structure
+      - Volume confirmation
+      NEVER trade pivot alone.
+
+  - id: oversized-pivot-position
+    name: Normal Size Position on Pivot Day
+    severity: high
+    type: conceptual
+    check: "Position size should be reduced around pivots"
+    indicators:
+      - "Standard 1% risk on pivot day"
+      - "Full size position"
+      - "Not adjusted for timing"
+    message: "Position size not reduced for pivot uncertainty."
+    fix_action: |
+      Reduce position size around pivots:
+      - Pivot day: 25-50% of normal size
+      - ±1 day: 50-75% of normal size
+      - ±2 days: 75% of normal size
+
+  - id: no-key-levels
+    name: Missing Key Price Levels
+    severity: high
+    type: conceptual
+    check: "Pivot analysis must include relevant price levels"
+    indicators:
+      - "No support/resistance defined"
+      - "Only time analysis"
+      - "Price level missing"
+    message: "Pivot analysis missing key price levels."
+    fix_action: |
+      Define before pivot:
+      - Nearest support level
+      - Nearest resistance level
+      - Major support/resistance zones
+      Time + Price = complete analysis
+
+  - id: cluster-not-identified
+    name: Pivot Cluster Not Recognized
+    severity: medium
+    type: conceptual
+    check: "Nearby pivots should be identified as cluster"
+    indicators:
+      - "Multiple pivots within 3 days"
+      - "Treating each independently"
+      - "No cluster notation"
+    message: "Pivot cluster not properly identified."
+    fix_action: |
+      When 2+ pivots within 3 days:
+      - Mark as cluster
+      - Treat as extended window
+      - Further reduce position size
+      - Wait for cluster completion
+
+  - id: wrong-asset-pivot
+    name: Applying Pivot to Wrong Asset
+    severity: medium
+    type: conceptual
+    check: "Pivot should be matched to correct asset"
+    indicators:
+      - "BTC pivot applied to ETH trade"
+      - "Cross-asset pivot assumption"
+    message: "Pivot being applied to different asset than calculated."
+    fix_action: |
+      Verify asset match:
+      - BTC pivots for BTC trades
+      - ETH pivots for ETH trades
+      - If trading alt on BTC pivot, acknowledge uncertainty
+
+  - id: news-event-conflict
+    name: Major News on Pivot Day
+    severity: high
+    type: conceptual
+    check: "High-impact news should be noted if on pivot day"
+    indicators:
+      - "FOMC on pivot day"
+      - "CPI release on pivot day"
+      - "Major event not acknowledged"
+    message: "Major news event coincides with pivot - plan adjustment needed."
+    fix_action: |
+      If high-impact news on pivot:
+      1. Note the conflict
+      2. Reduce size further
+      3. Wait for news reaction first
+      4. Then assess pivot signal
+      News impact is immediate; pivot is probabilistic.
+
+  - id: no-invalidation-criteria
+    name: Missing Pivot Invalidation
+    severity: high
+    type: conceptual
+    check: "Clear criteria for when pivot thesis is invalid"
+    indicators:
+      - "No time limit defined"
+      - "Will keep waiting"
+      - "Open-ended thesis"
+    message: "No invalidation criteria for pivot thesis."
+    fix_action: |
+      Define invalidation:
+      - Time: If no confirmation within ±2 days
+      - Price: If key level breaks without reversal
+      - Behavior: If opposite direction confirmed
+      
+      Pivot window is LIMITED. Set deadline.
+
+  - id: historical-accuracy-missing
+    name: No Historical Context
+    severity: low
+    type: conceptual
+    check: "Historical pivot accuracy should inform analysis"
+    indicators:
+      - "No mention of past pivots"
+      - "First time using system"
+      - "No track record context"
+    message: "Historical pivot accuracy not referenced."
+    fix_action: |
+      Include context:
+      - How accurate have recent pivots been?
+      - What magnitude moves typically occur?
+      - Any notable failures to learn from?

@@ -1,0 +1,102 @@
+# Claude Skills Library Registry
+version: "1.0.0"
+name: claude-skills-library
+description: Production-grade skills for Claude
+
+categories:
+  - id: trading
+    name: Trading
+    description: Technical analysis, risk management, execution
+    skills:
+      - technical-analysis
+      - risk-management
+      - pivot-trading
+      - market-regime
+      - trade-execution
+      - options-trading
+      - algorithmic-trading
+
+  - id: crypto
+    name: Cryptocurrency
+    description: Bitcoin, Ethereum, DeFi, on-chain analysis
+    skills:
+      - btc-analysis
+      - eth-analysis
+      - defi-yields
+      - on-chain-analysis
+      - market-structure
+      - altcoin-rotation
+
+  - id: ai-agents
+    name: AI Agents
+    description: Autonomous agents, automation, orchestration
+    skills:
+      - autonomous-agent
+      - browser-automation
+      - voice-agent
+      - multi-agent-orchestration
+      - tool-calling
+
+  - id: backend
+    name: Backend Development
+    description: APIs, databases, microservices
+    skills:
+      - api-design
+      - microservices
+      - database-optimization
+      - caching-strategies
+      - queue-systems
+
+  - id: frontend
+    name: Frontend Development
+    description: React, Next.js, performance
+    skills:
+      - react-patterns
+      - nextjs-optimization
+      - state-management
+      - performance-tuning
+
+  - id: devops
+    name: DevOps
+    description: CI/CD, containers, infrastructure
+    skills:
+      - cicd-pipelines
+      - docker-best-practices
+      - kubernetes
+      - observability
+      - terraform
+
+  - id: security
+    name: Security
+    description: Auth, compliance, best practices
+    skills:
+      - auth-patterns
+      - owasp-compliance
+      - api-security
+      - secrets-management
+
+packs:
+  essentials:
+    description: Core skills for most workflows
+    skills:
+      - trading/technical-analysis
+      - trading/risk-management
+      - crypto/btc-analysis
+
+  trading:
+    description: Complete trading toolkit
+    skills:
+      - trading/technical-analysis
+      - trading/risk-management
+      - trading/pivot-trading
+      - trading/market-regime
+      - crypto/btc-analysis
+      - crypto/eth-analysis
+
+  crypto:
+    description: Cryptocurrency analysis
+    skills:
+      - crypto/btc-analysis
+      - crypto/eth-analysis
+      - crypto/on-chain-analysis
+      - crypto/defi-yields

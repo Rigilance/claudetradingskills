@@ -1,0 +1,101 @@
+# Skill Schema Definition
+version: "1.0"
+
+skill_yaml:
+  required:
+    - id
+    - name
+    - version
+    - identity
+  optional:
+    - category
+    - tags
+    - core_principles
+    - patterns
+    - anti_patterns
+    - handoffs
+    - output_format
+
+  identity:
+    required:
+      - role
+    optional:
+      - expertise_level
+      - personality
+
+  patterns:
+    item:
+      required:
+        - name
+      optional:
+        - when_to_use
+        - implementation
+        - why
+
+  anti_patterns:
+    item:
+      required:
+        - name
+        - why_bad
+        - what_to_do_instead
+
+  handoffs:
+    item:
+      required:
+        - trigger
+        - to
+      optional:
+        - context
+
+sharp_edges_yaml:
+  required:
+    - sharp_edges
+  
+  sharp_edges:
+    item:
+      required:
+        - id
+        - summary
+        - severity
+        - situation
+        - why
+        - solution
+      optional:
+        - symptoms
+        - detection_pattern
+
+validations_yaml:
+  required:
+    - validations
+  
+  validations:
+    item:
+      required:
+        - id
+        - name
+        - severity
+        - type
+        - check
+        - message
+        - fix_action
+      optional:
+        - indicators
+        - pattern
+
+collaboration_yaml:
+  required:
+    - skill_id
+  optional:
+    - collaboration_version
+    - receives_from
+    - provides_to
+    - delegation_triggers
+    - common_combinations
+    - conflict_resolution
+    - data_contracts
+
+severity_levels:
+  - critical
+  - high
+  - medium
+  - low

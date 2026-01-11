@@ -1,0 +1,248 @@
+skill_id: technical-analysis
+collaboration_version: "1.0"
+
+receives_from:
+  - skill: market-regime
+    context: "Current market conditions and regime"
+    receives:
+      - "Trend vs range identification"
+      - "Volatility regime (high/low/normal)"
+      - "Risk-on vs risk-off environment"
+    provides: "Appropriate TA strategy selection based on regime"
+
+  - skill: pivot-trading
+    context: "Time-based pivot dates"
+    receives:
+      - "Upcoming pivot dates"
+      - "Historical pivot accuracy"
+      - "Pivot clustering"
+    provides: "Price-level analysis around pivot dates"
+
+  - skill: on-chain-analysis
+    context: "Blockchain data for crypto"
+    receives:
+      - "Whale accumulation/distribution"
+      - "Exchange flows"
+      - "Supply metrics"
+    provides: "Price level validation with on-chain data"
+
+  - skill: macro-analysis
+    context: "Economic backdrop"
+    receives:
+      - "Fed policy direction"
+      - "Dollar strength (DXY)"
+      - "Risk appetite indicators"
+    provides: "Technical setups aligned with macro trends"
+
+provides_to:
+  - skill: risk-management
+    context: "Trade setup parameters"
+    provides:
+      - "Entry price level"
+      - "Stop loss level"
+      - "Target levels"
+      - "Setup confidence score"
+    receives: "Position size and risk calculations"
+
+  - skill: trade-execution
+    context: "Execution strategy"
+    provides:
+      - "Entry zone"
+      - "Order type recommendation"
+      - "Urgency level"
+    receives: "Fill strategy and execution plan"
+
+delegation_triggers:
+  - trigger: "position size|how much|risk per trade|sizing"
+    delegate_to: risk-management
+    pattern: sequential
+    context: "Technical setup complete, need position sizing"
+    data_to_pass:
+      - entry_price
+      - stop_loss
+      - account_risk_percent
+
+  - trigger: "stop loss placement|where stop|ATR stop"
+    delegate_to: risk-management
+    pattern: sequential
+    context: "Need stop loss calculation"
+    data_to_pass:
+      - entry_price
+      - volatility_measure
+      - support_levels
+
+  - trigger: "market conditions|regime|trending or ranging"
+    delegate_to: market-regime
+    pattern: parallel
+    context: "Need broader market context for TA"
+    data_to_pass:
+      - asset_symbol
+      - timeframe
+
+  - trigger: "execute|enter the trade|get filled"
+    delegate_to: trade-execution
+    pattern: sequential
+    context: "Setup confirmed, need execution strategy"
+    data_to_pass:
+      - entry_zone
+      - urgency
+      - order_type
+
+  - trigger: "pivot dates|time cycles|IKAGI pivots"
+    delegate_to: pivot-trading
+    pattern: parallel
+    context: "Need time-based analysis"
+    data_to_pass:
+      - asset_symbol
+      - current_date
+      - price_levels
+
+  - trigger: "on-chain|whale|exchange flow"
+    delegate_to: on-chain-analysis
+    pattern: parallel
+    context: "Validate TA with on-chain metrics"
+    data_to_pass:
+      - asset_symbol
+      - direction_bias
+
+  - trigger: "fed|rates|macro|DXY"
+    delegate_to: macro-analysis
+    pattern: parallel
+    context: "Macro context for technical setup"
+    data_to_pass:
+      - asset_class
+      - direction_bias
+
+common_combinations:
+  - name: Complete Trade Setup
+    skills:
+      - technical-analysis
+      - risk-management
+      - market-regime
+    workflow: |
+      1. Check market regime (market-regime)
+         - Is it trending or ranging?
+         - What's the volatility level?
+      
+      2. Perform technical analysis (technical-analysis)
+         - Multi-timeframe analysis
+         - Key levels identification
+         - Entry trigger
+      
+      3. Calculate position size (risk-management)
+         - Risk per trade
+         - Position size
+         - R:R validation
+
+  - name: Crypto Trade Analysis
+    skills:
+      - technical-analysis
+      - on-chain-analysis
+      - btc-analysis
+    workflow: |
+      1. Check BTC direction (btc-analysis)
+         - BTC trend impacts all alts
+      
+      2. Validate with on-chain (on-chain-analysis)
+         - Whale behavior
+         - Exchange flows
+      
+      3. Technical entry (technical-analysis)
+         - Price levels
+         - Entry trigger
+         - Risk parameters
+
+  - name: Pivot-Based Trading
+    skills:
+      - technical-analysis
+      - pivot-trading
+      - risk-management
+    workflow: |
+      1. Identify pivot dates (pivot-trading)
+         - Upcoming pivots
+         - Historical accuracy
+      
+      2. Technical levels at pivots (technical-analysis)
+         - Support/resistance at pivot dates
+         - Potential reversal patterns
+      
+      3. Adjusted risk management (risk-management)
+         - Reduced size around pivots
+         - Tighter stops
+
+  - name: Full Market Analysis
+    skills:
+      - technical-analysis
+      - market-regime
+      - macro-analysis
+      - risk-management
+      - trade-execution
+    workflow: |
+      1. Macro context (macro-analysis)
+         - Fed stance
+         - Risk appetite
+      
+      2. Market regime (market-regime)
+         - Current phase
+         - Volatility
+      
+      3. Technical setup (technical-analysis)
+         - Multi-timeframe analysis
+         - Key levels
+      
+      4. Position sizing (risk-management)
+         - Risk calculation
+         - Size determination
+      
+      5. Execution (trade-execution)
+         - Order strategy
+         - Entry method
+
+conflict_resolution:
+  - scenario: "TA bullish but market-regime bearish"
+    resolution: |
+      - Reduce position size by 50%
+      - Tighten stop loss
+      - Take profits quicker
+      - Consider sitting out
+    priority: market-regime
+
+  - scenario: "TA signal but approaching pivot date"
+    resolution: |
+      - Wait for pivot to pass
+      - Or reduce size significantly
+      - Set wider stop for pivot volatility
+    priority: pivot-trading
+
+  - scenario: "TA bullish but on-chain bearish"
+    resolution: |
+      - On-chain = leading indicator
+      - Reduce conviction
+      - Tighter risk management
+      - Faster profit taking
+    priority: on-chain-analysis
+
+data_contracts:
+  inputs:
+    price_data:
+      required: true
+      format: "OHLCV"
+      timeframes: ["1H", "4H", "1D", "1W"]
+    
+    asset_symbol:
+      required: true
+      format: "string"
+      examples: ["BTC/USD", "ETH/USD", "SPX"]
+
+  outputs:
+    trade_setup:
+      format: "object"
+      fields:
+        - entry_price: "number"
+        - stop_loss: "number"
+        - target_1: "number"
+        - target_2: "number | null"
+        - direction: "long | short"
+        - confidence: "number (1-10)"
+        - invalidation: "string"
+        - timeframe: "string"

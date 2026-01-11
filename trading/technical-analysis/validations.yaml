@@ -1,0 +1,170 @@
+validations:
+  - id: no-stop-loss
+    name: Missing Stop Loss
+    severity: critical
+    type: conceptual
+    check: "Every trade recommendation must have a defined stop loss"
+    indicators:
+      - "No stop mentioned"
+      - "Will add stop later"
+      - "Mental stop"
+      - "Flexible stop"
+      - "Stop not defined"
+    message: "No stop loss defined - this is gambling, not trading."
+    fix_action: |
+      Define exact stop loss price BEFORE entry.
+      Place stop below structure (longs) or above structure (shorts).
+      Never use mental stops - they don't get executed.
+
+  - id: risk-reward-ratio
+    name: Poor Risk/Reward Ratio
+    severity: high
+    type: conceptual
+    check: "Risk/reward should be at least 1:2 for primary target"
+    indicators:
+      - "Risk > Reward"
+      - "Target too close"
+      - "Stop too wide"
+      - "R:R below 1:2"
+    message: "Risk/reward ratio below 1:2 - unfavorable math."
+    fix_action: |
+      Adjust setup to achieve minimum 1:2 R:R:
+      - Move entry closer to stop
+      - Extend target to logical level
+      - Tighten stop to structure
+      - If can't achieve 1:2, skip the trade
+
+  - id: no-invalidation
+    name: Missing Invalidation Level
+    severity: high
+    type: conceptual
+    check: "Every setup must have clear invalidation criteria"
+    indicators:
+      - "No invalidation mentioned"
+      - "Setup always valid"
+      - "Will reassess"
+    message: "No invalidation criteria - thesis cannot be proven wrong."
+    fix_action: |
+      Define what price action would prove thesis wrong:
+      - Specific price level
+      - Pattern break
+      - Time-based invalidation
+      Write it down before entry.
+
+  - id: single-timeframe
+    name: Single Timeframe Analysis
+    severity: medium
+    type: conceptual
+    check: "Analysis should include multiple timeframes"
+    indicators:
+      - "Only one timeframe mentioned"
+      - "No higher timeframe context"
+      - "Isolated chart pattern"
+    message: "Single timeframe analysis - missing context."
+    fix_action: |
+      Include minimum 2 timeframes:
+      - Higher timeframe for trend/context
+      - Entry timeframe for trigger
+      Example: Daily trend + 4H entry
+
+  - id: no-volume-analysis
+    name: Missing Volume Context
+    severity: medium
+    type: conceptual
+    check: "Price analysis should be confirmed with volume"
+    indicators:
+      - "No volume mentioned"
+      - "Pure price analysis"
+      - "Volume ignored"
+    message: "No volume confirmation - price moves need validation."
+    fix_action: |
+      Include volume analysis:
+      - Breakout: Above average volume
+      - Pullback: Declining volume (healthy)
+      - Reversal: Volume spike at key level
+
+  - id: missing-market-context
+    name: No Market Context
+    severity: medium
+    type: conceptual
+    check: "Individual asset analysis should consider broader market"
+    indicators:
+      - "No BTC context (for alts)"
+      - "No SPX context (for stocks)"
+      - "Isolated analysis"
+    message: "Missing broader market context."
+    fix_action: |
+      For crypto: Check BTC and ETH direction
+      For stocks: Check SPX and sector
+      For forex: Check DXY and correlations
+      Individual assets rarely decouple from their market.
+
+  - id: vague-entry
+    name: Vague Entry Criteria
+    severity: high
+    type: conceptual
+    check: "Entry must have specific trigger conditions"
+    indicators:
+      - "Enter somewhere here"
+      - "Around this level"
+      - "When it looks good"
+      - "On confirmation"
+    message: "Vague entry criteria - cannot be executed precisely."
+    fix_action: |
+      Specify exact entry:
+      - Price level (e.g., $91,500)
+      - Trigger (e.g., "4H close above $91,500")
+      - Order type (limit, market, stop)
+      
+  - id: no-confidence-level
+    name: Missing Confidence Assessment
+    severity: low
+    type: conceptual
+    check: "Setups should include confidence/probability assessment"
+    indicators:
+      - "No confidence mentioned"
+      - "All setups same weight"
+    message: "No confidence level - all setups appear equal."
+    fix_action: |
+      Rate setup confidence 1-10 based on:
+      - Confluence factors (more = higher)
+      - Trend alignment (aligned = higher)
+      - Volume confirmation (present = higher)
+      - Number of touches at level (more = higher)
+
+  - id: indicator-conflict
+    name: Conflicting Indicators
+    severity: medium
+    type: conceptual
+    check: "If multiple indicators mentioned, they should align"
+    indicators:
+      - "RSI says X but MACD says Y"
+      - "Conflicting signals"
+      - "Mixed signals"
+    message: "Indicators giving conflicting signals."
+    fix_action: |
+      When indicators conflict:
+      - Price action is the tiebreaker
+      - Higher timeframe wins
+      - Reduce position size
+      - Consider sitting out
+      Don't cherry-pick the indicator that fits your bias.
+
+code_validations:
+  - id: price-format
+    name: Invalid Price Format
+    severity: low
+    type: regex
+    pattern: '\$[0-9]{1,3}(,[0-9]{3})*(\.[0-9]{2})?|\$[0-9]+(\.[0-9]{2})?'
+    context: "Price values should be properly formatted"
+    message: "Price format inconsistent"
+    fix_action: "Use consistent price formatting: $91,500.00 or $91,500"
+
+  - id: percentage-validation
+    name: Invalid Percentage
+    severity: low
+    type: regex
+    pattern: '-?[0-9]+(\.[0-9]+)?%'
+    context: "Percentages should include % symbol"
+    message: "Percentage missing % symbol"
+    fix_action: "Include % symbol with percentage values"

@@ -1,0 +1,14 @@
+id: macro-analysis
+name: Macro Analysis
+version: "0.1.0"
+category: finance
+status: planned
+
+# TODO: Complete implementation
+identity:
+  role: TBD
+  personality: TBD
+
+patterns: []
+anti_patterns: []
+handoffs: []

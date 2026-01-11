@@ -1,0 +1,40 @@
+{
+  "name": "claude-skills-library",
+  "version": "1.0.0",
+  "description": "Production-grade skills for Claude - trading, crypto, AI agents, development, and more",
+  "main": "scripts/install.js",
+  "bin": {
+    "claude-skills": "./scripts/cli.js"
+  },
+  "scripts": {
+    "install-skills": "node scripts/install.js",
+    "validate": "node scripts/validate.js",
+    "list": "node scripts/list.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YOUR_USERNAME/claude-skills-library.git"
+  },
+  "keywords": [
+    "claude",
+    "ai",
+    "skills",
+    "trading",
+    "crypto",
+    "bitcoin",
+    "technical-analysis",
+    "risk-management",
+    "ai-agents",
+    "llm",
+    "anthropic"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/YOUR_USERNAME/claude-skills-library/issues"
+  },
+  "homepage": "https://github.com/YOUR_USERNAME/claude-skills-library#readme",
+  "dependencies": {
+    "js-yaml": "^4.1.0"
+  }
+}

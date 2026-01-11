@@ -1,0 +1,14 @@
+id: trade-execution
+name: Trade Execution
+version: "0.1.0"
+category: trading
+status: planned
+
+# TODO: Complete implementation
+identity:
+  role: TBD
+  personality: TBD
+
+patterns: []
+anti_patterns: []
+handoffs: []

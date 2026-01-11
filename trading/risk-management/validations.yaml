@@ -1,0 +1,186 @@
+validations:
+  - id: excessive-risk
+    name: Excessive Risk Per Trade
+    severity: critical
+    type: conceptual
+    check: "Risk per trade should not exceed 2% of account"
+    indicators:
+      - "Risk > 2%"
+      - "Large position size"
+      - "Full account on one trade"
+    message: "Risk per trade exceeds 2% - danger of significant account damage."
+    fix_action: |
+      Reduce position size to bring risk to 1-2%:
+      - Standard: 1% risk per trade
+      - Maximum: 2% risk per trade
+      - High risk tolerance: Still max 2%
+
+  - id: no-stop-defined
+    name: Position Without Stop Loss
+    severity: critical
+    type: conceptual
+    check: "Every position must have a defined stop loss"
+    indicators:
+      - "No stop loss mentioned"
+      - "Mental stop"
+      - "Will figure it out"
+      - "Flexible stop"
+    message: "Position without stop loss - unlimited downside risk."
+    fix_action: |
+      Define stop loss BEFORE entry:
+      1. Calculate based on structure
+      2. Verify risk % with stop distance
+      3. Place hard stop (not mental)
+
+  - id: poor-risk-reward
+    name: Unfavorable Risk/Reward
+    severity: high
+    type: conceptual
+    check: "Minimum 1:2 risk/reward ratio"
+    indicators:
+      - "Risk greater than reward"
+      - "Small target"
+      - "Wide stop, close target"
+    message: "Risk/reward below 1:2 - unfavorable expected value."
+    fix_action: |
+      Adjust setup for minimum 1:2:
+      - Tighten stop to structure
+      - Extend target to next resistance
+      - Find better entry (closer to stop)
+      - Skip trade if can't achieve 1:2
+
+  - id: correlation-overexposure
+    name: Correlated Position Overexposure
+    severity: high
+    type: conceptual
+    check: "Total risk in correlated assets should not exceed 3%"
+    indicators:
+      - "Multiple crypto positions"
+      - "Multiple tech stocks"
+      - "Same sector concentration"
+    message: "Correlated exposure exceeds safe limits."
+    fix_action: |
+      Reduce total correlated exposure:
+      - Max 3% total in crypto (all coins combined)
+      - Max 3% in single sector
+      - Consider hedges for large exposure
+
+  - id: missing-position-calc
+    name: Position Size Not Calculated
+    severity: high
+    type: conceptual
+    check: "Position size must be calculated using formula"
+    indicators:
+      - "Just buying X amount"
+      - "Round number of shares/coins"
+      - "Whatever fits"
+    message: "Position size not properly calculated."
+    fix_action: |
+      Use position sizing formula:
+      Position = (Account × Risk%) ÷ (Entry - Stop)
+      
+      Always calculate, never estimate.
+
+  - id: leverage-excessive
+    name: Excessive Leverage
+    severity: critical
+    type: conceptual
+    check: "Leverage should be appropriate for asset volatility"
+    indicators:
+      - "> 3x on BTC"
+      - "> 2x on ETH"
+      - "Any leverage on altcoins"
+      - "> 2x on stocks"
+    message: "Leverage too high for asset volatility."
+    fix_action: |
+      Reduce leverage:
+      - BTC max: 3x
+      - ETH max: 2x
+      - Altcoins: 1x (no leverage)
+      - Stocks: 2x max
+
+  - id: drawdown-protocol-missing
+    name: No Drawdown Protocol
+    severity: medium
+    type: conceptual
+    check: "Drawdown circuit breakers should be defined"
+    indicators:
+      - "No daily loss limit"
+      - "No weekly loss limit"
+      - "Will keep trading"
+    message: "No drawdown protection defined."
+    fix_action: |
+      Define circuit breakers:
+      - Daily: Stop at -3%
+      - Weekly: Reduce size at -5%
+      - Monthly: Full review at -10%
+
+  - id: recovery-math-ignored
+    name: Ignoring Drawdown Recovery Math
+    severity: medium
+    type: conceptual
+    check: "Drawdown recovery requirements should be acknowledged"
+    indicators:
+      - "Will make it back easily"
+      - "Just need a few wins"
+    message: "Underestimating difficulty of drawdown recovery."
+    fix_action: |
+      Acknowledge recovery math:
+      - 10% loss needs 11% gain
+      - 25% loss needs 33% gain
+      - 50% loss needs 100% gain
+      Prevention > Recovery
+
+  - id: scaling-plan-missing
+    name: No Scaling Plan
+    severity: low
+    type: conceptual
+    check: "Multi-target positions should have scaling plan"
+    indicators:
+      - "Will decide when to sell"
+      - "Play it by ear"
+      - "See how it goes"
+    message: "No predefined scaling/exit plan."
+    fix_action: |
+      Define exit plan before entry:
+      - Target 1: % to take, price level
+      - Target 2: % to take, price level
+      - Runner: How to trail stop
+
+calculation_validations:
+  - id: position-size-formula
+    name: Position Size Formula Validation
+    type: formula
+    check: "(Account × Risk%) ÷ (Entry - Stop) = Position Size"
+    components:
+      - account_size: "Must be positive number"
+      - risk_percent: "Must be 0.5-2%"
+      - entry_price: "Must be positive"
+      - stop_loss: "Must be different from entry"
+    message: "Position size calculation error."
+    
+  - id: risk-reward-formula
+    name: Risk/Reward Formula Validation
+    type: formula
+    check: "(Target - Entry) ÷ (Entry - Stop) >= 2"
+    message: "R:R ratio below minimum 1:2"
+
+  - id: max-drawdown-check
+    name: Maximum Account Exposure
+    type: formula
+    check: "Total open risk <= 6% of account"
+    message: "Total portfolio risk exceeds 6%"
+    fix_action: "Close or reduce positions to bring total risk under 6%"
+
+output_validations:
+  - id: required-fields
+    name: Required Output Fields
+    type: structure
+    required:
+      - account_size
+      - risk_percentage
+      - entry_price
+      - stop_loss
+      - position_size
+      - risk_reward_ratio
+    message: "Missing required fields in position calculation output."

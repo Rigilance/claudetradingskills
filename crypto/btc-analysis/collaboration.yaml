@@ -1,0 +1,161 @@
+skill_id: btc-analysis
+collaboration_version: "1.0"
+
+receives_from:
+  - skill: technical-analysis
+    context: "Price action analysis"
+    receives:
+      - "Chart patterns"
+      - "Key levels"
+      - "Trend direction"
+    provides: "BTC-specific context and interpretation"
+
+  - skill: on-chain-analysis
+    context: "Blockchain data"
+    receives:
+      - "Exchange flows"
+      - "Whale movements"
+      - "Holder metrics"
+    provides: "Price-level context for on-chain signals"
+
+  - skill: macro-analysis
+    context: "Macro environment"
+    receives:
+      - "Fed stance"
+      - "DXY direction"
+      - "Risk appetite"
+    provides: "BTC correlation interpretation"
+
+  - skill: pivot-trading
+    context: "Time-based analysis"
+    receives:
+      - "BTC pivot dates"
+      - "Historical accuracy"
+    provides: "Price-level context for pivots"
+
+provides_to:
+  - skill: eth-analysis
+    context: "Market leadership"
+    provides:
+      - "BTC trend direction"
+      - "BTC dominance status"
+      - "Risk environment"
+    receives: "ETH-specific dynamics"
+
+  - skill: technical-analysis
+    context: "BTC-specific patterns"
+    provides:
+      - "Cycle context"
+      - "Key BTC levels"
+      - "Correlation status"
+    receives: "Pattern identification"
+
+  - skill: risk-management
+    context: "Position context"
+    provides:
+      - "Volatility regime"
+      - "Key levels for stops"
+      - "Correlation risk"
+    receives: "Position sizing"
+
+delegation_triggers:
+  - trigger: "chart|pattern|entry"
+    delegate_to: technical-analysis
+    pattern: parallel
+    context: "Need TA for BTC"
+    
+  - trigger: "position size|risk|how much"
+    delegate_to: risk-management
+    pattern: sequential
+    context: "BTC position sizing"
+
+  - trigger: "on-chain|whale|exchange"
+    delegate_to: on-chain-analysis
+    pattern: parallel
+    context: "On-chain validation"
+
+  - trigger: "ETH|altcoin|alt"
+    delegate_to: eth-analysis
+    pattern: parallel
+    context: "ETH/alt specific analysis"
+
+  - trigger: "pivot|IKAGI|cycle date"
+    delegate_to: pivot-trading
+    pattern: parallel
+    context: "BTC pivot analysis"
+
+common_combinations:
+  - name: Complete BTC Analysis
+    skills:
+      - btc-analysis
+      - technical-analysis
+      - risk-management
+    workflow: |
+      1. BTC market context (btc-analysis)
+         - Trend, dominance, macro
+      2. Technical setup (technical-analysis)
+         - Patterns, levels, entry
+      3. Position sizing (risk-management)
+         - Risk calculation
+
+  - name: BTC with On-Chain
+    skills:
+      - btc-analysis
+      - on-chain-analysis
+      - technical-analysis
+    workflow: |
+      1. On-chain signals (on-chain-analysis)
+         - Exchange flows, whale activity
+      2. BTC context (btc-analysis)
+         - Interpret on-chain in context
+      3. Price confirmation (technical-analysis)
+         - Entry trigger
+
+  - name: IKAGI BTC Trading
+    skills:
+      - btc-analysis
+      - pivot-trading
+      - technical-analysis
+      - risk-management
+    workflow: |
+      1. Identify BTC pivots (pivot-trading)
+      2. BTC market context (btc-analysis)
+      3. Price levels at pivots (technical-analysis)
+      4. Adjusted sizing (risk-management)
+
+conflict_resolution:
+  - scenario: "On-chain bullish but price breaking down"
+    resolution: |
+      - Price action takes priority short-term
+      - On-chain is leading but not immediate
+      - Reduce position, wait for alignment
+    priority: technical-analysis
+
+  - scenario: "BTC bullish but macro risk-off"
+    resolution: |
+      - Reduce position size
+      - Tighter stops
+      - Expect correlation to reassert
+    priority: macro-analysis
+
+data_contracts:
+  inputs:
+    price_data:
+      required: true
+      format: "OHLCV"
+      
+    dominance:
+      required: false
+      format: "percentage"
+
+  outputs:
+    btc_analysis:
+      format: "object"
+      fields:
+        trend: "bullish | bearish | neutral"
+        dominance_trend: "rising | falling | stable"
+        key_support: "number[]"
+        key_resistance: "number[]"
+        macro_context: "string"
+        bias: "string"
+        confidence: "number (1-10)"
